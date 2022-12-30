@@ -1,8 +1,3 @@
-# current problem:
-# putting in Brian, CA 
-# expect an error, saying city doesn't exist
-# instead, prints weather in Los Angeles
-
 # smaller problem:
 # probably more related to website than me, doesn't seem to display high at certain 
 # times of the day, or when current temp is high
@@ -19,7 +14,7 @@ def main():
 
 		url = 'https://www.wunderground.com/weather/us/' + state.lower() + '/' + city
 
-		if check_url(url) == False:
+		if check_url(url, city) == False:
 			continue
 
 		get_weather(url, state)
@@ -33,22 +28,20 @@ def get_state():
 	"NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT",
 	"VT","VA","WA","WV","WI","WY"]
 
-	state = input("Enter a state using its two letter code: ")
+	state = input("Enter a state using its two letter code: ").strip()
 
 	while state.upper() not in eligible_states:
 		print("Ineligible state name, try again")
-		state = input("Enter a state using its two letter code: ")
+		state = input("Enter a state using its two letter code: ").strip()
 
 	return state
 
 def get_city(state):
-	city = input("Enter a city: ")
-
-	url = 'https://www.wunderground.com/weather/us/' + state.lower() + '/' + city
+	city = input("Enter a city: ").strip()
 
 	return city
 
-def check_url(url):
+def check_url(url, city):
 	response = requests.get(url)
 	if response.status_code == 404:
 	    print('Website not loading. Try again later')
@@ -63,7 +56,30 @@ def check_url(url):
 	if soup.find("title").string == "Weather Underground":
 		print("Hmm... something went wrong. Check the spelling of your city name!")
 		return False
-	
+
+	for char in city:
+		if char == " ":
+			city.replace(" ","")
+
+	actual_city = ""
+
+	for char in soup.find("title").string:
+		if char == ",":
+			break
+		actual_city = actual_city + char
+
+	true_actual_city = actual_city
+
+	for char in actual_city:
+		if char == " ":
+			actual_city.replace(" ","")
+
+	if city.lower() == actual_city.lower():
+		pass
+	else:
+		print("Did you mean " + true_actual_city + "?")
+		print("Showing results for " + true_actual_city)
+
 	return True	
 
 def get_weather(url, state):
@@ -78,10 +94,9 @@ def get_weather(url, state):
 	span = soup.find_all('span', class_= "wu-value wu-value-to", style = "color:;")
 	currentTemp = span[0].string
 
-	title = soup.find("title").string
 	city = ""
 
-	for char in title:
+	for char in soup.find("title").string:
 		if char == ",":
 			break
 		city = city + char
