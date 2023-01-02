@@ -8,8 +8,8 @@ def main():
 		state = get_state()
 		city = get_city(state)
 
-		url = 'https://www.wunderground.com/weather/us/' + state.lower()
-			+ '/' + city
+		url = 'https://www.wunderground.com/weather/us/' + state.lower() 	  \
+		+ '/' + city
 
 		# If URL is bad, return to start of loop and reprompt user
 		if check_url(url, city) == False:
