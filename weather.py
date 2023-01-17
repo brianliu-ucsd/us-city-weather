@@ -8,8 +8,8 @@ def main():
 		state = get_state()
 		city = get_city(state)
 
-		url = 'https://www.wunderground.com/weather/us/' + state.lower() 	  \
-		+ '/' + city
+		url = 'https://www.wunderground.com/weather/us/' + state.lower() + \
+		'/' + city
 
 		# If URL is bad, return to start of loop and reprompt user
 		if check_url(url, city) == False:
@@ -60,8 +60,8 @@ def check_url(url, city):
 	# When city not found, Wunderground directs to a site titled
 	# "Weather Underground"
 	if soup.find("title").string == "Weather Underground":
-		print("Hmm... something went wrong. Check the spelling of your city \
-			name!")
+		print("Hmm... something went wrong. Check the spelling of your city" +
+			" name!")
 		return False
 
 	# Comparing city name inputted and city name loaded by website
@@ -124,8 +124,8 @@ def get_weather(url, state):
 
 	# Print out current temperature, low, and high if it exists
 	if currentTemp == None:
-		print("Hmm... something went wrong. Check the spelling of your city \
-			name and state!")
+		print("Hmm... something went wrong. Check the spelling of your city" +
+			" name and state!")
 		return
 	else: 
 		print("The current temperature in " + city + ", " + state.upper()
@@ -140,12 +140,12 @@ def get_weather(url, state):
 		print("High for today is " + high + "F")
 
 def user_exit():
-	exit = input("Finished? Type Y to exit or N to continue using this \
-		application: ")
+	exit = input("Finished? Type Y to exit or N to continue using this" +
+	" application: ")
 
 	while exit.upper() != "Y" and exit.upper() != "N":
-		exit = input("Invalid input! Please type Y to exit or N to continue \
-			using this application: ")
+		exit = input("Invalid input! Please type Y to exit or N to continue" +
+		" using this application: ")
 
 	if exit.upper() == "Y":
 		return True
